@@ -1,8 +1,6 @@
 <template>
   <div>
     Hello World
- <!-- #建置image
- docker build --build-arg ENV_MODE=production -t pricefrontendsitev3 . -->
   </div>
 </template>
 
