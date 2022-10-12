@@ -5,6 +5,6 @@ export const home: RouteRecordRaw = {
     path: "/",
     component: Home,
     meta: {
-        title: "C-Square 線上商城"
+        title: "C-Squared 線上商城"
     }
 }
