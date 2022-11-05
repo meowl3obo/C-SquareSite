@@ -1,6 +1,7 @@
-import Data from './data'
+import Product, { ProductState } from './product'
 
+export type TState = ProductState
 
 export const modules = {
-    Data,
+  Product,
 };
