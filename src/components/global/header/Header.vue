@@ -18,13 +18,6 @@
     <transition name="ease_top_bottom">
       <Classify v-show="!isScrollToBottom" />
     </transition>
-    <!-- <div v-show="isShowChildClassify" class="child-classifies">
-      <div class="content" :style="`left: ${childLeft}px`">
-        <div v-for="item in childClassify" :key="item.Id" class="child-claddify">
-          {{ item.Name }}
-        </div>
-      </div>
-    </div> -->
   </header>
 </template>
 
