@@ -4,7 +4,7 @@
       <span>Sale</span>
       <span>新品</span>
       <template v-for="item in classifies" :key="item.Id">
-        <span @mouseenter="(e) => parentHover(item.Id, e)">
+        <span @mouseenter="(e) => {parentHover(item.Id, e)}">
           {{ item.Name }}
         </span>
       </template>

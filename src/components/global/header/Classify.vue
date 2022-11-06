@@ -6,7 +6,7 @@
       <span>新品</span>
       <span>|</span>
       <template v-for="(item, index) in classifies" :key="item.Id">
-        <span @mouseenter="(e) => parentHover(item.Id, e)">
+        <span @mouseenter="(e) => {parentHover(item.Id, e)}">
           {{ item.Name }}
         </span>
         <span v-if="index+1 < classifies.length">
@@ -81,7 +81,7 @@ export default defineComponent({
     const childClassify = ref<Array<IChildClassify>>([]);
     const childLeft = ref<number>(0);
 
-    const parentHover = (parentID: number, e?: MouseEvent) => {
+    const parentHover = (parentID: number, e?: MouseEvent): void => {
       const classify = classifies.value.find((x) => x.Id == parentID);
       if (classify && classify.Child.length > 0 && e) {
         const path = e.composedPath() as Array<HTMLElement>
