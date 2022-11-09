@@ -1,25 +1,30 @@
 <template>
-  <div class="div-classify" @mouseleave="parentHover(-1)">
+  <div class="div-classify" @mouseleave="controlClassify(false)">
     <div class="classify">
-      <span>Sale</span>
-      <span>新品</span>
-      <template v-for="item in classifies" :key="item.Id">
-        <span @mouseenter="(e) => {parentHover(item.Id, e)}">
-          {{ item.Name }}
-        </span>
-      </template>
+      <span v-if="width > 1024" @mouseenter="controlClassify(true)">
+        PRODUCT
+      </span>
+      <span v-else @click="controlClassify(!isShowClassifyDrop)">
+        {{ isShowClassifyDrop ? 'CLOSE' : 'MENU' }}
+      </span>
     </div>
-    <div v-show="isShowChildClassify" class="child-classifies">
-      <div class="content" :style="`left: ${childLeft}px`">
-        <div v-for="item in childClassify" :key="item.Id" class="child-claddify">
-          {{ item.Name }}
-        </div>
-      </div>
-    </div>
+    <!-- <transition name="ease_drop"> -->
+      <ClassifyDrop :IsOpen="isShowClassifyDrop" />
+    <!-- </transition> -->
   </div>
 </template>
 
 <style lang="scss" scoped>
+@import "@/styles/_common.scss";
+@import "@/styles/_animation.scss";
+
+@include pc {
+  .classify > span {
+    &:hover {
+      background-color: var(--drop-hover);
+    }
+  }
+}
 .div-classify {
   position: relative;
   display: flex;
@@ -29,65 +34,31 @@
     span {
       cursor: pointer;
       padding: 10px;
-    }
-  }
-  .child-classifies {
-    position: absolute;
-    bottom: -5px;
-    transform: translateY(100%);
-    width: 100%;
-    border-radius: 10px;
-    background-color: var(--drop-40);
-    backdrop-filter: blur(50px);
-    height: 190px;
-    box-shadow: 0px 0px 10px var(--drop-60);
-    padding-block: 10px;
-
-    .content {
-      position: absolute;
-    }
-
-    .child-claddify {
-      cursor: pointer;
-      padding: 5px 10px;
+      font-weight: bold;
       border-radius: 10px;
       transition: background-color 0.25s ease-in-out;
-
-      &:hover {
-        background-color: var(--drop-hover);
-      }
     }
   }
 }
 </style>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { defineComponent, defineAsyncComponent, ref, computed } from 'vue'
 import { useStore } from 'vuex'
-import { IParentClassify, IChildClassify } from "@/types/product/Classify";
 
 export default defineComponent({
+  components: {
+    ClassifyDrop: defineAsyncComponent(() => import("./ClassifyDrop.vue")),
+  },
   setup() {
     const store = useStore()
-    const classifies = computed(() => store.getters["Product/GetClassify"] as Array<IParentClassify>);
-    const isShowChildClassify = ref<boolean>(false);
-    const childClassify = ref<Array<IChildClassify>>([]);
-    const childLeft = ref<number>(0);
-
-    const parentHover = (parentID: number, e?: MouseEvent) => {
-      const classify = classifies.value.find((x) => x.Id == parentID);
-      if (classify && classify.Child.length > 0 && e) {
-        const path = e.composedPath() as Array<HTMLElement>
-        isShowChildClassify.value = true;
-        childClassify.value = classify.Child
-        childLeft.value = path[0].offsetLeft - 7
-      } else {
-        isShowChildClassify.value = false;
-        childClassify.value = []
-      }
+    const width = computed(() => store.getters["Global/GetWidth"] as number)
+    const isShowClassifyDrop = ref<boolean>(false)
+    const controlClassify = (isOpen: boolean) => {
+      isShowClassifyDrop.value = isOpen
     }
 
-    return { classifies, isShowChildClassify, childClassify, childLeft, parentHover }
+    return { width, isShowClassifyDrop, controlClassify }
   },
 })
 </script>

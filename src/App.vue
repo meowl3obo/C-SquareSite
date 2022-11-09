@@ -6,7 +6,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, defineAsyncComponent } from 'vue'
+import { defineComponent, defineAsyncComponent, onMounted } from 'vue'
+import { useStore } from 'vuex'
 import { GetClassifies } from '@/library/global/Data'
 
 export default defineComponent({
@@ -14,6 +15,18 @@ export default defineComponent({
     Header: defineAsyncComponent(() => import('@/components/global/header/Header.vue'))
   },
   setup() {
+    const store = useStore()
+
+    onMounted(() => {
+      window.addEventListener("resize", windowWidth);
+      windowWidth()
+    })
+
+    const windowWidth = () => {
+      const width = window.innerWidth
+      store.dispatch("Global/SetWidth", width)
+    }
+
     GetClassifies()
   },
 })

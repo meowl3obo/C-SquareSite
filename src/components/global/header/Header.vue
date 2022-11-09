@@ -3,50 +3,59 @@
     <nav class="main-nav">
       <div class="nav-start">
         <transition name="ease_top_bottom">
-          <ClassifySM v-show="isScrollToBottom" />
+          <ClassifySM v-show="isScrollToBottom || width <= 1024" />
         </transition>
       </div>
       <div>
-        <h1 class="logo" :class="isScrollToBottom ? 'logo-sm' : ''">
+        <h1 class="logo" :class="isScrollToBottom || width <= 1024 ? 'logo-sm' : ''">
           <a href="/" @click.prevent="toPath('/')">C.Squared</a>
         </h1>
       </div>
       <div class="nav-end">
-        <UserControl />
+        <UserControl v-if="width > 1024" />
       </div>
     </nav>
     <transition name="ease_top_bottom">
-      <Classify v-show="!isScrollToBottom" />
+      <Classify v-show="!isScrollToBottom && width > 1024" />
     </transition>
   </header>
 </template>
 
 <style lang="scss" scoped>
 @import "@/styles/_animation.scss";
+@import "@/styles/_common.scss";
 @import url('https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&display=swap');
-// @include pc {
-//   header {
-//     height: 200px;
-//   }
-// }
-// @include mobile {
-//   header {
-//     height: 70px;
-//   }
-// }
+
+@include mobile {
+  header {
+    width: calc(100% - 40px);
+    .main-nav {
+      padding: 10px;
+      .nav-start {
+        align-items: center;
+      }
+    }
+  }
+}
+@include pc {
+  header {
+    width: calc(100% - 40px);
+    .main-nav {
+      padding: 10px 20px;
+    }
+  }
+}
 
 header {
   position: fixed;
   top: 0;
-  width: calc(100% - 40px);
+  padding: 20px;
   transition: height 0.2s ease-out;
-  padding: 20px ;
 
   .main-nav {
     position: relative;
     display: flex;
     justify-content: space-between;
-    padding: 10px 20px;
     border-radius: 10px;
     background-color: var(--bg-color-20);
     backdrop-filter: blur(50px);
@@ -101,7 +110,7 @@ header {
       position: absolute;
     }
 
-    .child-claddify {
+    .child-classify {
       cursor: pointer;
       padding-block: 5px;
     }
@@ -110,17 +119,21 @@ header {
 </style>
 
 <script lang="ts">
-import { defineComponent, defineAsyncComponent, onMounted, ref } from "vue";
+import { defineComponent, defineAsyncComponent, onMounted, ref, computed } from "vue";
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 export default defineComponent({
   components: {
     UserControl: defineAsyncComponent(() => import("./UserControl.vue")),
     Classify: defineAsyncComponent(() => import("./Classify.vue")),
     ClassifySM: defineAsyncComponent(() => import("./ClassifySM.vue")),
+    ClassifyDrop: defineAsyncComponent(() => import("./ClassifyDrop.vue")),
   },
   setup() {
+    const store = useStore()
     const router = useRouter();
+    const width = computed(() => store.getters["Global/GetWidth"] as number)
     const nowScrollTop = ref<number>(0);
     const isScrollToBottom = ref<boolean>(false);
 
@@ -138,7 +151,7 @@ export default defineComponent({
       })
     },)
 
-    return { isScrollToBottom, toPath };
+    return { width, isScrollToBottom, toPath };
   },
 });
 </script>

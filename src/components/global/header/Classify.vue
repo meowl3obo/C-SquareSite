@@ -1,9 +1,9 @@
 <template>
   <div class="div-classify" @mouseleave="parentHover(-1)">
     <div class="classify">
-      <span>Sale</span>
+      <span @mouseenter="parentHover(-1)">Sale</span>
       <span>|</span>
-      <span>新品</span>
+      <span @mouseenter="parentHover(-1)">新品</span>
       <span>|</span>
       <template v-for="(item, index) in classifies" :key="item.Id">
         <span @mouseenter="(e) => {parentHover(item.Id, e)}">
@@ -16,7 +16,7 @@
     </div>
     <div v-show="isShowChildClassify" class="child-classifies">
       <div class="content" :style="`left: ${childLeft}px`">
-        <div v-for="item in childClassify" :key="item.Id" class="child-claddify">
+        <div v-for="item in childClassify" :key="item.Id" class="child-classify">
           {{ item.Name }}
         </div>
       </div>
@@ -44,7 +44,7 @@
     transform: translateY(100%);
     width: 100%;
     border-radius: 10px;
-    background-color: var(--drop-40);
+    background-color: var(--drop-60);
     backdrop-filter: blur(50px);
     height: 190px;
     box-shadow: 0px 0px 10px var(--drop-60);
@@ -54,7 +54,7 @@
       position: absolute;
     }
 
-    .child-claddify {
+    .child-classify {
       cursor: pointer;
       padding: 5px 10px;
       border-radius: 10px;
