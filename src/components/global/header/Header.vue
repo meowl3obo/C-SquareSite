@@ -64,7 +64,7 @@ header {
   .header {
     border-radius: 10px;
     background-color: var(--bg-color-20);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(100px);
     padding-bottom: 5px;
   }
 
@@ -117,7 +117,7 @@ header {
     width: 100%;
     border-radius: 10px;
     background-color: var(--drop);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(100px);
     height: 190px;
 
     .content {

@@ -61,7 +61,7 @@
   left: -10px;
   border-radius: 10px;
   background-color: var(--drop-60);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(100px);
   box-shadow: 0px 0px 10px var(--drop-60);
   overflow: hidden;
   transition: all 0.2s ease-out;
