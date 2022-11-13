@@ -9,5 +9,5 @@ export interface IParentClassify extends IClassify {
 }
 
 export interface IChildClassify extends IClassify {
-  ParentId: number
+  ParentId: string
 }
