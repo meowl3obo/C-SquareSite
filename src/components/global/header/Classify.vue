@@ -98,10 +98,10 @@ export default defineComponent({
     const classifies = computed(() => store.getters["Product/GetClassify"] as Array<IParentClassify>);
     const childClassify = ref<Array<IChildClassify>>([]);
     const childLeft = ref<number>(0);
-    const parentID = ref<number>(0);
+    const parentID = ref<string>("");
     const isOpen = ref<boolean>(false);
 
-    const parentHover = (hoverParentID: number, e?: MouseEvent): void => {
+    const parentHover = (hoverParentID: string, e?: MouseEvent): void => {
       parentID.value = hoverParentID
       const classify = classifies.value.find((x) => x.Id == hoverParentID);
       if (classify && classify.Child.length > 0 && e) {
