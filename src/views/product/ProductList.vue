@@ -1,10 +1,25 @@
 <template>
   <div>
-    <div v-for="item in productList" :key="item.Id">
+    <div v-for="item in productList" :key="item.Id" class="product">
+      <div>
+        <img :src="item.MainImg">
+      </div>
+      <div>
+        <span>{{ item.Name }}</span>
+      </div>
+      <div>
+        <span>TWD {{ item.Price }}</span>
+      </div>
       {{ item }}
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.product {
+  text-align: center;
+}
+</style>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch } from 'vue'

@@ -1,5 +1,5 @@
 export interface IClassify {
-  Id: number
+  Id: string
   Name: string
   Path: string
 }
