@@ -11,10 +11,12 @@
         <div class="classify-title">New</div>
       </div>
       <div v-for="item in classifies" :key="item.Id" class="classify">
-        <div class="classify-title">{{ item.Name }}</div>
+        <div class="classify-title">
+          <a :href="`/product/${item.Id}`" @click.prevent="toPath(`/product/${item.Id}`)">{{ item.Name }}</a>
+        </div>
         <template v-if="width > 1024">
           <div v-for="item2 in item.Child" :key="item2.Id" class="child-classify">
-            {{ item2.Name }}
+            <a :href="`/product/${item.Id}/${item2.Id}`" @click.prevent="toPath(`/product/${item.Id}/${item2.Id}`)">{{ item2.Name }}</a>
           </div>
         </template>
       </div>
@@ -78,6 +80,11 @@
     padding: 5px 10px;
     border-radius: 10px;
     font-weight: bold;
+    
+    a {
+      text-decoration: unset;
+      color: var(--main-font);
+    }
 
     .classify-title {
       cursor: pointer;
@@ -108,6 +115,7 @@
 <script lang="ts">
 import { computed, defineComponent, Ref, toRefs } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import { IParentClassify } from "@/types/product/Classify";
 
 export default defineComponent({
@@ -117,10 +125,15 @@ export default defineComponent({
   setup(props) {
     const isOpen = toRefs(props).IsOpen as Ref<boolean>
     const store = useStore()
+    const router = useRouter()
     const width = computed(() => store.getters["Global/GetWidth"] as number)
     const classifies = computed(() => store.getters["Product/GetClassify"] as Array<IParentClassify>);
+    
+    const toPath = (path: string) => {
+      router.push(path)
+    }
 
-    return { width, classifies, isOpen }
+    return { width, classifies, isOpen, toPath }
   },
 })
 </script>
