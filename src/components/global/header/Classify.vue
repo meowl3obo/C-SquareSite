@@ -3,21 +3,21 @@
     <div class="classify">
       <span @mouseenter="parentHover(-1)">Sale</span>
       <span>|</span>
-      <span @mouseenter="parentHover(-1)">新品</span>
+      <span @mouseenter="parentHover(-1)">New</span>
       <span>|</span>
       <template v-for="(item, index) in classifies" :key="item.Id">
         <span @mouseenter="(e) => {parentHover(item.Id, e)}">
-          {{ item.Name }}
+          <a :href="`/product/${item.Id}`" @click.prevent="toPath(`/product/${item.Id}`)">{{ item.Name }}</a>
         </span>
         <span v-if="index+1 < classifies.length">
           |
         </span>
       </template>
     </div>
-    <div v-show="isShowChildClassify" class="child-classifies">
+    <div class="child-classifies" :class="isOpen ? 'm-open-classies' : 'm-close-classies'"> 
       <div class="content" :style="`left: ${childLeft}px`">
         <div v-for="item in childClassify" :key="item.Id" class="child-classify">
-          {{ item.Name }}
+          <a :href="`/product/${parentID}/${item.Id}`" @click.prevent="toPath(`/product/${parentID}/${item.Id}`)">{{ item.Name }}</a>
         </div>
       </div>
     </div>
@@ -25,30 +25,42 @@
 </template>
 
 <style lang="scss" scoped>
+.m-open-classies {
+  padding-block: 10px;
+  height: 190px;
+}
+
+.m-close-classies {
+  padding-block: 0px;
+  height: 0;
+}
+
 .div-classify {
   position: relative;
-  display: flex;
-  justify-content: center;
+  text-align: center;
 
   .classify {
     span {
       padding: 10px;
+      a {
+        text-decoration: unset;
+        color: var(--main-font);
+      }
     }
     & > span:nth-child(odd) {
       cursor: pointer;
     }
   }
   .child-classifies {
-    position: absolute;
+    // position: absolute;
+    position: relative;
     bottom: -5px;
-    transform: translateY(100%);
     width: 100%;
-    border-radius: 10px;
+    border-radius: 20px;
     background-color: var(--drop-60);
-    backdrop-filter: blur(50px);
-    height: 190px;
     box-shadow: 0px 0px 10px var(--drop-60);
-    padding-block: 10px;
+    overflow: hidden;
+    transition: all 0.2s ease-out;
 
     .content {
       position: absolute;
@@ -59,6 +71,11 @@
       padding: 5px 10px;
       border-radius: 10px;
       transition: background-color 0.25s ease-in-out;
+
+      a {
+        text-decoration: unset;
+        color: var(--main-font);
+      }
 
       &:hover {
         background-color: var(--drop-hover);
@@ -71,30 +88,38 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import { IParentClassify, IChildClassify } from "@/types/product/Classify";
 
 export default defineComponent({
   setup() {
+    const router = useRouter()
     const store = useStore()
     const classifies = computed(() => store.getters["Product/GetClassify"] as Array<IParentClassify>);
-    const isShowChildClassify = ref<boolean>(false);
     const childClassify = ref<Array<IChildClassify>>([]);
     const childLeft = ref<number>(0);
+    const parentID = ref<number>(0);
+    const isOpen = ref<boolean>(false);
 
-    const parentHover = (parentID: number, e?: MouseEvent): void => {
-      const classify = classifies.value.find((x) => x.Id == parentID);
+    const parentHover = (hoverParentID: number, e?: MouseEvent): void => {
+      parentID.value = hoverParentID
+      const classify = classifies.value.find((x) => x.Id == hoverParentID);
       if (classify && classify.Child.length > 0 && e) {
+        isOpen.value = true
         const path = e.composedPath() as Array<HTMLElement>
-        isShowChildClassify.value = true;
         childClassify.value = classify.Child
         childLeft.value = path[0].offsetLeft - 7
       } else {
-        isShowChildClassify.value = false;
+        isOpen.value = false
         childClassify.value = []
       }
     }
 
-    return { classifies, isShowChildClassify, childClassify, childLeft, parentHover }
+    const toPath = (path: string) => {
+      router.push(path)
+    }
+
+    return { classifies, childClassify, childLeft, parentID, isOpen, parentHover, toPath }
   },
 })
 </script>

@@ -8,7 +8,7 @@
         <div class="classify-title">Sale</div>
       </div>
       <div class="classify">
-        <div class="classify-title">新品</div>
+        <div class="classify-title">New</div>
       </div>
       <div v-for="item in classifies" :key="item.Id" class="classify">
         <div class="classify-title">{{ item.Name }}</div>
@@ -58,14 +58,11 @@
   height: 0;
 }
 .classifies {
-  position: absolute;
-  transform: translateY(100%);
   left: -10px;
   border-radius: 10px;
   background-color: var(--drop-60);
-  backdrop-filter: blur(50px);
+  backdrop-filter: blur(20px);
   box-shadow: 0px 0px 10px var(--drop-60);
-  // padding-block: 10px;
   overflow: hidden;
   transition: all 0.2s ease-out;
 

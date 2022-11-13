@@ -1,5 +1,5 @@
 <template>
-  <div class="div-classify" @mouseleave="controlClassify(false)">
+  <div class="div-classify">
     <div class="classify">
       <span v-if="width > 1024" @mouseenter="controlClassify(true)">
         PRODUCT
@@ -9,7 +9,6 @@
       </span>
     </div>
     <!-- <transition name="ease_drop"> -->
-      <ClassifyDrop :IsOpen="isShowClassifyDrop" />
     <!-- </transition> -->
   </div>
 </template>
@@ -50,12 +49,13 @@ export default defineComponent({
   components: {
     ClassifyDrop: defineAsyncComponent(() => import("./ClassifyDrop.vue")),
   },
-  setup() {
+  setup(_, { emit }) {
     const store = useStore()
     const width = computed(() => store.getters["Global/GetWidth"] as number)
     const isShowClassifyDrop = ref<boolean>(false)
     const controlClassify = (isOpen: boolean) => {
       isShowClassifyDrop.value = isOpen
+      emit("controlClassifyDrop", isShowClassifyDrop.value)
     }
 
     return { width, isShowClassifyDrop, controlClassify }

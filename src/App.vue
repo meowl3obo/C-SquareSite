@@ -1,7 +1,9 @@
 <template>
   <div>
     <Header />
-    <router-view></router-view>
+    <div style="margin-top: 195px">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 

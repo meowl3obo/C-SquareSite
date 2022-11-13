@@ -1,23 +1,29 @@
 <template>
-  <header>
-    <nav class="main-nav">
-      <div class="nav-start">
-        <transition name="ease_top_bottom">
-          <ClassifySM v-show="isScrollToBottom || width <= 1024" />
-        </transition>
-      </div>
-      <div>
-        <h1 class="logo" :class="isScrollToBottom || width <= 1024 ? 'logo-sm' : ''">
-          <a href="/" @click.prevent="toPath('/')">C.Squared</a>
-        </h1>
-      </div>
-      <div class="nav-end">
-        <UserControl v-if="width > 1024" />
-      </div>
-    </nav>
-    <transition name="ease_top_bottom">
-      <Classify v-show="!isScrollToBottom && width > 1024" />
-    </transition>
+  <header @mouseleave="controlClassifyDrop(false)">
+    <div class="header">
+      <nav class="main-nav">
+        <div class="nav-start">
+          <transition name="ease_top_bottom">
+            <ClassifySM v-show="isScrollToBottom || width <= 1024" @controlClassifyDrop="controlClassifyDrop" />
+          </transition>
+        </div>
+        <div>
+          <h1 class="logo" :class="isScrollToBottom || width <= 1024 ? 'logo-sm' : ''">
+            <a href="/" @click.prevent="toPath('/')">C.Squared</a>
+          </h1>
+        </div>
+        <div class="nav-end">
+          <UserControl v-if="width > 1024" />
+          <span v-else class="bag">
+            <a>BAG</a>
+          </span>
+        </div>
+      </nav>
+      <transition name="ease_top_bottom">
+        <Classify v-show="!isScrollToBottom && width > 1024" />
+      </transition>
+      <ClassifyDrop :IsOpen="isShowClassifyDrop" />
+    </div>
   </header>
 </template>
 
@@ -31,8 +37,12 @@
     width: calc(100% - 40px);
     .main-nav {
       padding: 10px;
-      .nav-start {
-        align-items: center;
+      .bag {
+        cursor: pointer;
+        padding: 10px;
+        font-weight: bold;
+        border-radius: 10px;
+        transition: background-color 0.25s ease-in-out;
       }
     }
   }
@@ -52,17 +62,22 @@ header {
   padding: 20px;
   transition: height 0.2s ease-out;
 
+  .header {
+    border-radius: 10px;
+    background-color: var(--bg-color-20);
+    backdrop-filter: blur(20px);
+    padding-bottom: 5px;
+  }
+
   .main-nav {
     position: relative;
     display: flex;
     justify-content: space-between;
-    border-radius: 10px;
-    background-color: var(--bg-color-20);
-    backdrop-filter: blur(50px);
 
     .nav-start {
       display: flex;
       justify-content: flex-start;
+      align-items: center;
       flex-basis: 50%;
 
       .classify {
@@ -103,7 +118,7 @@ header {
     width: 100%;
     border-radius: 10px;
     background-color: var(--drop);
-    backdrop-filter: blur(50px);
+    backdrop-filter: blur(20px);
     height: 190px;
 
     .content {
@@ -136,9 +151,14 @@ export default defineComponent({
     const width = computed(() => store.getters["Global/GetWidth"] as number)
     const nowScrollTop = ref<number>(0);
     const isScrollToBottom = ref<boolean>(false);
+    const isShowClassifyDrop = ref<boolean>(false);
 
     const toPath = (path: string) => {
       router.push(path)
+    }
+
+    const controlClassifyDrop = (newStatus: boolean) => {
+      isShowClassifyDrop.value = newStatus
     }
 
     onMounted(() => {
@@ -151,7 +171,7 @@ export default defineComponent({
       })
     },)
 
-    return { width, isScrollToBottom, toPath };
+    return { width, isScrollToBottom, isShowClassifyDrop, toPath, controlClassifyDrop };
   },
 });
 </script>
