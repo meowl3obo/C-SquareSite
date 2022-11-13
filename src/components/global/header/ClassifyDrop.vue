@@ -27,7 +27,7 @@
 @include mobile {
   .classifies {
     bottom: -10px;
-    width: calc(100vw - 40px);
+    width: 100%;
     .classify-title {
       font-size: 20px;
       opacity: .9;
@@ -35,7 +35,7 @@
   }
   .m-open-classies {
     padding-block: 10px;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 25px);
   }
 }
 @include pc {

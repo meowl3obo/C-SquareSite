@@ -34,7 +34,6 @@
 
 @include mobile {
   header {
-    width: calc(100% - 40px);
     .main-nav {
       padding: 10px;
       .bag {
@@ -49,7 +48,6 @@
 }
 @include pc {
   header {
-    width: calc(100% - 40px);
     .main-nav {
       padding: 10px 20px;
     }
@@ -58,6 +56,7 @@
 
 header {
   position: fixed;
+  width: calc(100% - 40px);
   top: 0;
   padding: 20px;
   transition: height 0.2s ease-out;
