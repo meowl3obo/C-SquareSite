@@ -1,9 +1,9 @@
 <template>
-  <div class="div-classify" @mouseleave="parentHover("")">
+  <div class="div-classify" @mouseleave="parentHover('')">
     <div class="classify">
-      <span @mouseenter="parentHover("")">Sale</span>
+      <span @mouseenter="parentHover('')">Sale</span>
       <span>|</span>
-      <span @mouseenter="parentHover("")">New</span>
+      <span @mouseenter="parentHover('')">New</span>
       <span>|</span>
       <template v-for="(item, index) in classifies" :key="item.Id">
         <span @mouseenter="(e) => {parentHover(item.Id, e)}">
